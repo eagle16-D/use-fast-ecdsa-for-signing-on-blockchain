@@ -1,6 +1,6 @@
 from hashlib import sha256
 from EllipticCurve import EllipticCurve
-from Utils import inverse_mod, secure_random_int, lagrange_interpolation, shamir_share
+from Utils import inverse_mod, secure_random_int, lagrange_interpolation, shamir_share, verify_shamir_share, verify
 from Point import Point
 
 # System parameters
@@ -79,10 +79,14 @@ if __name__ == "__main__":
     print("len_Coefficients:", len(coefficients))
     print("Coefficients:", coefficients)
 
-    shares = {p.id: shamir_share(p.id, coefficients, q) for p in players}
     for p in players:
-        p.secret_share = shares[p.id]  # this is p(i) for player i
-    print("Secret shares:", shares)
+        p.secret_share = shamir_share(p.id, coefficients, q)
+
+    verify_shares = {v: verify_shamir_share(coefficients[v], curve) for v in range(T)}
+    print(verify_shares)
+    for p in players:
+        p.verify_share = verify(verify_shares, p.secret_share, p.id, curve)
+        print(p.verify_share)
 
     # 4. Digital signature process
     message = "Hello, Threshold ECDSA!"

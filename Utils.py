@@ -74,5 +74,15 @@ def shamir_share(x, coeffs, q):
     Returns:
         int: The computed share p(xi) mod q.
     """
-    return sum(coeffs[i] * pow(x, i, q) for i in range(len(coeffs))) % q
+    p_i = sum(coeffs[i] * pow(x, i, q) for i in range(len(coeffs))) % q
+    return p_i
 
+def verify_shamir_share(coeffs, curve):
+    return curve.multiply(curve.G, coeffs)
+def verify(v:dict, sigma_i, id, curve): 
+    # sigma_i is the secret to be shared p(i)
+    left = curve.multiply(curve.G, sigma_i)
+    right = curve.O
+    for i, v_i in v.items():
+        right = curve.add(right, curve.multiply(v_i, pow(id, i, curve.order)))
+    return curve.coincide(left, right)
