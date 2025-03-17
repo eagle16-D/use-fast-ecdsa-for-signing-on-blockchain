@@ -39,6 +39,7 @@ Provides utility functions such as:
 - **Modular Arithmetic Operations:** Includes modular inverse computation.
 - **Lagrange Interpolation:** Implements secret reconstruction in threshold cryptography.
 - **Shamir's sharing:** Sharing the need to restruct the private key for every player.
+- **Verify the Sharing:** Check for the correctness received share from _Shamir's sharing_
 
 ### **Sign.py**
 
