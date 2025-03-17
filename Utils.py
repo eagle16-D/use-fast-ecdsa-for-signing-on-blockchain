@@ -1,5 +1,5 @@
 def is_prime(p):
-    if p == None:
+    if p is None:
         return False
     if p < 2:
         return False
@@ -14,26 +14,65 @@ def inverse_mod(k, q):
     return pow(k, q - 2, q)
 
 
+def lagrange_interpolation(shares:dict, indices, q):
+    """
+    Recovers the secret value using Lagrange interpolation.
+    Retruns the list of the products of the lamda with the corresponding shares: lamda_i * p(i)
+    p(i) = shares[pi_id]
+
+    """
+    x = 0
+    lamda = []
+    omega = []
+    for pi_id in indices:
+        num, denom = 1, 1
+        for pj_id in indices:
+            if pi_id != pj_id:
+                num = (num * pj_id) % q
+                denom = (denom * (pj_id - pi_id)) % q
+        lambda_i = (num * inverse_mod(denom, q)) % q
+        lamda.append(lambda_i)  #use this to compute omega_i = lambda_i * p(i)
+        omega_i = (shares[pi_id] * lambda_i) % q
+        omega.append(omega_i)
+    x = sum(omega) % q
+    return x, lamda, omega
+
+
 import os
+
 def secure_random_int(q: int) -> int:
     """
-    Sinh số ngẫu nhiên an toàn trong khoảng [1, q-1] bằng cách sử dụng os.urandom().
+    Generate a secure random integer in the range [1, q-1] using os.urandom().
     
     Args:
-        q (int): Giá trị giới hạn (số nguyên tố q trong trường Z_q).
+        q (int): The upper limit (prime number q in field Z_q).
     
     Returns:
-        int: Số ngẫu nhiên trong khoảng [1, q-1].
+        int: A random integer in the range [1, q-1].
     """
-    num_bytes = (q.bit_length() + 7) // 8  # Số bytes cần thiết để biểu diễn q
+    num_bytes = (q.bit_length() + 7) // 8  # Number of bytes needed to represent q
     while True:
-        rand_bytes = os.urandom(num_bytes)  # Tạo số ngẫu nhiên dạng bytes
-        rand_int = int.from_bytes(rand_bytes, "big") % q  # Chuyển thành số nguyên mod q
-        if 1 <= rand_int < q:  # Đảm bảo không lấy giá trị 0
+        rand_bytes = os.urandom(num_bytes)  # Generate random bytes
+        rand_int = int.from_bytes(rand_bytes, "big") % q  # Convert to integer mod q
+        if 1 <= rand_int < q:  # Ensure the value is not 0
             return rand_int
-        
 
-q = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141
-random_value = secure_random_int(q)
 
-print("🔹 Giá trị ngẫu nhiên:", random_value)
+def shamir_share(x, coeffs, q):
+    """
+    Computes the value of the polynomial p(xi) in Shamir's Secret Sharing Scheme.
+    
+    The polynomial is defined as:
+        p(x) = sigma + coeffs[1] * x + coeffs[2] * x^2 + ... + coeffs[T-1] * x^(T-1) mod q
+        in which sigma = coeffs[0]
+    Args:
+        x (int): The x-coordinate where p(x) is evaluated.
+        sigma (int): The secret to be shared (constant term of the polynomial).
+        coeffs (list): A list of (T-1) randomly chosen coefficients with the first element is the private key.
+        q (int): A prime number used for modular arithmetic.
+    
+    Returns:
+        int: The computed share p(xi) mod q.
+    """
+    return sum(coeffs[i] * pow(x, i, q) for i in range(len(coeffs))) % q
+

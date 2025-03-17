@@ -21,6 +21,7 @@ class EllipticCurve:
     - find_order(P): Tìm bậc của một điểm P
     - is_generator(P): Kiểm tra xem điểm P có phải là điểm sinh không
     - set_generator(P): Đặt điểm sinh G thủ công
+    - sum_points(points): compute the sum of all point in the list of points
 
     """
     def __init__(self, p, a, b):

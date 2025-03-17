@@ -1,6 +1,6 @@
 from hashlib import sha256
 from EllipticCurve import EllipticCurve
-from Utils import inverse_mod, secure_random_int
+from Utils import inverse_mod, secure_random_int, lagrange_interpolation, shamir_share
 from Point import Point
 
 # System parameters
@@ -44,47 +44,6 @@ class Player:
         """
         return sha256(str(self.yi).encode()).hexdigest()
 
-def shamir_share(x, coeffs, q):
-    """
-    Computes the value of the polynomial p(xi) in Shamir's Secret Sharing Scheme.
-    
-    The polynomial is defined as:
-        p(x) = sigma + coeffs[1] * x + coeffs[2] * x^2 + ... + coeffs[T-1] * x^(T-1) mod q
-        in which sigma = coeffs[0]
-    Args:
-        x (int): The x-coordinate where p(x) is evaluated.
-        sigma (int): The secret to be shared (constant term of the polynomial).
-        coeffs (list): A list of (T-1) randomly chosen coefficients.
-        q (int): A prime number used for modular arithmetic.
-    
-    Returns:
-        int: The computed share p(xi) mod q.
-    """
-    return sum(coeffs[i] * pow(x, i, q) for i in range(T)) % q
-
-def lagrange_interpolation(shares:dict, indices, q):
-    """
-    Recovers the secret value using Lagrange interpolation.
-    Retruns the list of the products of the lamda with the corresponding shares: lamda_i * p(i)
-    p(i) = shares[pi_id]
-
-    """
-    x = 0
-    lamda = []
-    omega = []
-    for pi_id in indices:
-        num, denom = 1, 1
-        for pj_id in indices:
-            if pi_id != pj_id:
-                num = (num * pj_id) % q
-                denom = (denom * (pj_id - pi_id)) % q
-        lambda_i = (num * inverse_mod(denom, q)) % q
-        lamda.append(lambda_i)  #use this to compute omega_i = lambda_i * p(i)
-        omega_i = (shares[pi_id] * lambda_i) % q
-        omega.append(omega_i)
-    x = sum(omega) % q
-    return x, lamda, omega
-
 
 
 if __name__ == "__main__":
@@ -115,8 +74,10 @@ if __name__ == "__main__":
     print("Secret Key:", secret_key)
 
     # create coefficients for the polynomial
-    coefficients = [secure_random_int(q) for _ in range(T)]
-
+    coefficients = [secure_random_int(q) for _ in range(T - 1)]
+    coefficients.insert(0, secret_key)  # insert the secret key as the first coefficient
+    print("len_Coefficients:", len(coefficients))
+    print("Coefficients:", coefficients)
 
     shares = {p.id: shamir_share(p.id, coefficients, q) for p in players}
     for p in players:
