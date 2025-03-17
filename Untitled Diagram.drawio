@@ -65,7 +65,7 @@
             <mxPoint x="-165" y="512" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="9C13xfKSrSKQo0F87a4g-57" value="Shamir&#39;s Sharing" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="4">
+        <mxCell id="9C13xfKSrSKQo0F87a4g-57" value="Feldman&#39;s VSS" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="4">
           <mxGeometry x="85" y="392" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="9C13xfKSrSKQo0F87a4g-69" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="4" source="9C13xfKSrSKQo0F87a4g-66" target="9C13xfKSrSKQo0F87a4g-68">
