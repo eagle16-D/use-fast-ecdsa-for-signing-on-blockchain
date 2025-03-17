@@ -67,3 +67,6 @@ The main program for generating key and signing the message
 
 ## **Block Diagram**
 
+The following diagram illustrates the protocol workflow:
+
+![Block Diagram](signing.drawio.png)
