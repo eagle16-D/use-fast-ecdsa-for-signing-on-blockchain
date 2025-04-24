@@ -90,7 +90,7 @@ namespace shared_model {
      * @param curve Đường cong elliptic
      * @return Giá trị xác minh
      */
-    Point verifyShamirShare(const std::vector<BigInt> &coeffs,
+    Point verifyShamirShareValue(const BigInt &coeffs,
                             const EllipticCurve &curve);
 
     /*

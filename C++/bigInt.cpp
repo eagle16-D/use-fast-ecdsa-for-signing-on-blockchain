@@ -521,14 +521,14 @@ namespace shared_model {
   }  // namespace crypto
 }  // namespace shared_model
 
-int main(int argc, char const *argv[]) {
-  // kiểm tra 1 số lẻ chia cho 2
-  using namespace shared_model::crypto;
-  BigInt a("0x09");
-  BigInt b("0x02");
-  BigInt c = a / b;
-  std::cout << "a: " << a.to_hex() << std::endl;
-  std::cout << "b: " << b.to_hex() << std::endl;
-  std::cout << "c: " << c.to_hex() << std::endl;
-  return 0;
-}
+// int main(int argc, char const *argv[]) {
+//   // kiểm tra 1 số lẻ chia cho 2
+//   using namespace shared_model::crypto;
+//   BigInt a("0x09");
+//   BigInt b("0x02");
+//   BigInt c = a / b;
+//   std::cout << "a: " << a.to_hex() << std::endl;
+//   std::cout << "b: " << b.to_hex() << std::endl;
+//   std::cout << "c: " << c.to_hex() << std::endl;
+//   return 0;
+// }

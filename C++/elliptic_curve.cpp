@@ -19,6 +19,7 @@ namespace shared_model {
       order_ = BigInt() ;
     }
 
+
     bool EllipticCurve::isOnCurve(const Point &P) const {
       if (P.isInfinity()) {
         return true;
@@ -119,9 +120,6 @@ namespace shared_model {
         throw std::invalid_argument("G is not on the curve");
       }
       G_ = G;
-    }
-    Point EllipticCurve::getGenerator() const {
-      return G_;
     }
 
     bool EllipticCurve::isGenerator(const Point &P) const {

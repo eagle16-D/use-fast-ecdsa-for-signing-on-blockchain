@@ -34,6 +34,20 @@ namespace shared_model {
         return b_;
       }
 
+      Point O() const {
+        return O_;
+      }
+      Point G() const {
+        return G_;
+      }
+      BigInt p() const {
+        return p_;
+      }
+
+      BigInt order() const {
+        return order_;
+      }
+
       /*
       * Hàm kiểm tra xem một điểm có nằm trên đường cong elliptic hay không
       * @param P Điểm cần kiểm tra
@@ -85,10 +99,25 @@ namespace shared_model {
       * @return Điểm sinh của đường cong
       */
       Point findGenerator();
+
+      /*
+      * Hàm tìm bậc của một điểm trên đường cong
+      */
       BigInt findOrder(const Point &P) const;
+      /*
+      * Hàm kiểm tra xem một điểm có phải là điểm sinh hay không
+      */
       bool isGenerator(const Point &P) const;
+      /*
+      * Hàm thiết lập điểm sinh của đường cong
+      */
       void setGenerator(const Point &P);
-      Point getGenerator() const;
+
+      /*
+      * Hàm cộng một danh sách các điểm trên đường cong
+      * @param points Danh sách các điểm cần cộng
+      * @return Điểm tổng của các điểm trong danh sách
+      */
       Point sumPoints(const std::vector<Point> &points) const;
 
      private:
